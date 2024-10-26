@@ -15,6 +15,7 @@ function PartyDetail() {
   const [activities, setActivities] = useState([]);
   const [checkedActivities, setCheckedActivities] = useState(new Set());
   const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]); // State for messages
 
   // Function to get partyId from the URL
   const getPartyIdFromUrl = () => {
@@ -31,6 +32,9 @@ function PartyDetail() {
         const response = await customAxios.get(`/api/products/${partyId}`);
         setParty(response.data);
         setActivities(response.data.todoList || []);
+        console.log(response.data.messages);
+
+        setMessages(response.data.messages || []); // Load messages
       } catch (error) {
         console.error("Error fetching party details:", error);
       }
@@ -41,7 +45,7 @@ function PartyDetail() {
 
   const handleCheckboxChange = async (activity) => {
     const updatedCheckedActivities = new Set(checkedActivities);
-    const userId = "671cd122488df9c76c51bb40";
+    const userId = "671ce88cb695598809b7eb2b";
 
     if (updatedCheckedActivities.has(activity.task)) {
       updatedCheckedActivities.delete(activity.task);
@@ -65,9 +69,23 @@ function PartyDetail() {
     setCheckedActivities(updatedCheckedActivities);
   };
 
-  const handleSendMessage = () => {
-    console.log("Message sent:", message);
-    setMessage(""); // Clear input after sending
+  const handleSendMessage = async () => {
+    const userId = "671ce88cb695598809b7eb2b"; // Replace with actual user ID
+    if (message.trim()) {
+      try {
+        const response = await customAxios.post(
+          `/api/party/send-message/${partyId}`,
+          {
+            userId: userId,
+            text: message,
+          }
+        );
+        setMessages(response.data.party.messages); // Update messages
+        setMessage(""); // Clear input after sending
+      } catch (error) {
+        console.error("Error sending message:", error);
+      }
+    }
   };
 
   if (!party) {
@@ -78,7 +96,20 @@ function PartyDetail() {
     <Container>
       <Typography variant="h4">{party.title}</Typography>
       <Typography variant="subtitle1">Location: {party.location}</Typography>
-      <Typography variant="h6">Chat</Typography>
+
+      <Typography variant="h6" style={{ marginTop: "20px" }}>
+        Chat
+      </Typography>
+      <List>
+        {messages.map((msg) => (
+          <ListItem key={msg._id}>
+            <Typography>
+              <strong>{msg.sender?.name}</strong>: {msg.text}
+            </Typography>
+          </ListItem>
+        ))}
+      </List>
+
       <TextField
         label="Type a message"
         fullWidth
