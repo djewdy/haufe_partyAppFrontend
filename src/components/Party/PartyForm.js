@@ -19,6 +19,7 @@ function PartyForm() {
   const [description, setDescription] = useState("");
   const [activity, setActivity] = useState("");
   const [todoList, setTodoList] = useState([]);
+  const userId = JSON.parse(localStorage.getItem("user"))?._id;
 
   const handleAddActivity = () => {
     if (activity.trim()) {
@@ -42,7 +43,7 @@ function PartyForm() {
       location,
       description,
       todoList,
-      creator: "605c72b37b3b4f0e6c4f8e9a",
+      creator: userId,
     };
 
     try {

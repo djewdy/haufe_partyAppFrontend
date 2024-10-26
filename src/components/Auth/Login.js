@@ -15,11 +15,12 @@ function Login() {
         email: username,
         password,
       });
-      const { token } = response.data;
+      const { token, _id } = response.data;
       console.log(response.data);
 
       // Save the token and user info in localStorage
       localStorage.setItem("user", JSON.stringify({ token }));
+      localStorage.setItem("userId", JSON.stringify({ _id }));
 
       // Redirect to home or another page
       navigate("/");

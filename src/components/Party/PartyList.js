@@ -12,6 +12,7 @@ import customAxios from "../../customAxios";
 
 function PartyList() {
   const [parties, setParties] = useState([]);
+  const userId = JSON.parse(localStorage.getItem("user"))?._id;
 
   useEffect(() => {
     const fetchParties = async () => {
@@ -27,7 +28,7 @@ function PartyList() {
   }, []);
 
   const handleJoinParty = async (partyId) => {
-    const userId = "671cd122488df9c76c51bb40"; // Replace with actual user ID logic
+    // const userId = "671cd122488df9c76c51bb40"; // Replace with actual user ID logic
 
     try {
       await customAxios.post(`api/party/join-party/${partyId}`, {

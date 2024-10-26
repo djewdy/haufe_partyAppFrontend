@@ -16,6 +16,7 @@ function PartyDetail() {
   const [checkedActivities, setCheckedActivities] = useState(new Set());
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]); // State for messages
+  const userId = JSON.parse(localStorage.getItem("user"))?._id;
 
   // Function to get partyId from the URL
   const getPartyIdFromUrl = () => {
@@ -45,7 +46,7 @@ function PartyDetail() {
 
   const handleCheckboxChange = async (activity) => {
     const updatedCheckedActivities = new Set(checkedActivities);
-    const userId = "671ce88cb695598809b7eb2b";
+    // const userId = "671ce88cb695598809b7eb2b";
 
     if (updatedCheckedActivities.has(activity.task)) {
       updatedCheckedActivities.delete(activity.task);
@@ -70,7 +71,7 @@ function PartyDetail() {
   };
 
   const handleSendMessage = async () => {
-    const userId = "671ce88cb695598809b7eb2b"; // Replace with actual user ID
+    // const userId = "671ce88cb695598809b7eb2b"; // Replace with actual user ID
     if (message.trim()) {
       try {
         const response = await customAxios.post(
