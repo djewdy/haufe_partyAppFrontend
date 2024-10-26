@@ -1,29 +1,73 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
-  List,
-  ListItem,
-  ListItemText,
+  Card,
+  CardContent,
   Typography,
+  Button,
+  Grid,
 } from "@mui/material";
+import axios from "axios";
+import customAxios from "../../customAxios";
 
 function PartyList() {
-  // This should ideally pull data from a database
-  const parties = [
-    { name: "Beach Party", location: "Miami" },
-    { name: "House Party", location: "LA" },
-  ];
+  const [parties, setParties] = useState([]);
+
+  useEffect(() => {
+    const fetchParties = async () => {
+      try {
+        const response = await customAxios.get("/api/products");
+        setParties(response.data);
+      } catch (error) {
+        console.error("Error fetching parties:", error);
+      }
+    };
+
+    fetchParties();
+  }, []);
+
+  const handleJoinParty = async (partyId) => {
+    const userId = "671cd122488df9c76c51bb40"; // Replace with actual user ID logic
+
+    try {
+      await customAxios.post(`api/party/join-party/${partyId}`, {
+        userId,
+      });
+      window.location.href = `/party/${partyId}`; // Navigate to PartyDetail page
+    } catch (error) {
+      console.error("Error joining party:", error);
+    }
+  };
 
   return (
     <Container>
-      <Typography variant="h4">All Parties</Typography>
-      <List>
-        {parties.map((party, index) => (
-          <ListItem key={index}>
-            <ListItemText primary={party.name} secondary={party.location} />
-          </ListItem>
+      <Typography variant="h4" gutterBottom>
+        All Parties
+      </Typography>
+      <Grid container spacing={3}>
+        {parties.map((party) => (
+          <Grid item xs={12} sm={6} md={4} key={party._id}>
+            <Card>
+              <CardContent>
+                <Typography variant="h5">{party.title}</Typography>
+                <Typography variant="subtitle1" color="textSecondary">
+                  {party.location}
+                </Typography>
+                <Typography variant="body2" color="textSecondary" paragraph>
+                  {party.description}
+                </Typography>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => handleJoinParty(party._id)}
+                >
+                  Join Party
+                </Button>
+              </CardContent>
+            </Card>
+          </Grid>
         ))}
-      </List>
+      </Grid>
     </Container>
   );
 }
