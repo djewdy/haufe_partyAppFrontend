@@ -12,7 +12,7 @@ import customAxios from "../../customAxios";
 
 function PartyList() {
   const [parties, setParties] = useState([]);
-  const userId = JSON.parse(localStorage.getItem("user"))?._id;
+  const token = JSON.parse(localStorage.getItem("userId"))?._id;
 
   useEffect(() => {
     const fetchParties = async () => {

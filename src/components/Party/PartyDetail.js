@@ -16,7 +16,7 @@ function PartyDetail() {
   const [checkedActivities, setCheckedActivities] = useState(new Set());
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]); // State for messages
-  const userId = JSON.parse(localStorage.getItem("user"))?._id;
+  const token = JSON.parse(localStorage.getItem("userId"))?._id;
 
   // Function to get partyId from the URL
   const getPartyIdFromUrl = () => {

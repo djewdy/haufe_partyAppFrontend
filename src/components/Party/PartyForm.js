@@ -19,7 +19,7 @@ function PartyForm() {
   const [description, setDescription] = useState("");
   const [activity, setActivity] = useState("");
   const [todoList, setTodoList] = useState([]);
-  const userId = JSON.parse(localStorage.getItem("user"))?._id;
+  const token = JSON.parse(localStorage.getItem("userId"))?._id;
 
   const handleAddActivity = () => {
     if (activity.trim()) {
